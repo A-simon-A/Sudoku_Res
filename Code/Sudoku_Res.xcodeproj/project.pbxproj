@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F4D4C86E26D82CF900322BFC /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F4D4C86D26D82CF900322BFC /* main.cpp */; };
+		F4D4C87526D82DF800322BFC /* Definition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F4D4C87426D82DF800322BFC /* Definition.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,8 @@
 /* Begin PBXFileReference section */
 		F4D4C86A26D82CF900322BFC /* Sudoku_Res */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Sudoku_Res; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4D4C86D26D82CF900322BFC /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		F4D4C87426D82DF800322BFC /* Definition.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Definition.cpp; sourceTree = "<group>"; };
+		F4D4C87626D82E0400322BFC /* Statement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Statement.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +61,8 @@
 			isa = PBXGroup;
 			children = (
 				F4D4C86D26D82CF900322BFC /* main.cpp */,
+				F4D4C87426D82DF800322BFC /* Definition.cpp */,
+				F4D4C87626D82E0400322BFC /* Statement.h */,
 			);
 			path = Sudoku_Res;
 			sourceTree = "<group>";
@@ -118,6 +123,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F4D4C87526D82DF800322BFC /* Definition.cpp in Sources */,
 				F4D4C86E26D82CF900322BFC /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
