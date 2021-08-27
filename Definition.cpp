@@ -39,7 +39,7 @@ square fill_square(void){
     return res ;
 }
 
-void full_1_init(grid playing_grid){
+void full_1_init(grid& playing_grid){
     unsigned int column, row ;
     for (column = 0; column <= 8; ++column) {
         for (row = 0; row <= 8; ++row) {
@@ -50,7 +50,7 @@ void full_1_init(grid playing_grid){
     }
 }
 
-void valid_status_verification(grid playing_grid, coord coordinates){
+void valid_status_verification(grid& playing_grid, coord coordinates){
     switch (playing_grid.tabular[coordinates.row][coordinates.column].value) {
         case 0b000000001:
             playing_grid.tabular[coordinates.row][coordinates.column].valid_status = true ;
@@ -93,29 +93,29 @@ void valid_status_verification(grid playing_grid, coord coordinates){
     } // OPTIMISATION ???
 }
 
-void row_analysis(grid playing_grid, coord coordinates){
+void row_analysis(grid& playing_grid, coord coordinates){
     unsigned int column ;
     for (column = 0; column <= 8; ++column) {
         if(column != coordinates.column){
             if(playing_grid.tabular[coordinates.row][column].valid_status == true){
-                playing_grid.tabular[coordinates.row][coordinates.column].value ^= playing_grid.tabular[coordinates.row][column].value ;
+                playing_grid.tabular[coordinates.row][coordinates.column].value &= (~playing_grid.tabular[coordinates.row][column].value) ;
             }
         }
     }
 }
 
-void column_analysis(grid playing_grid, coord coordinates){
+void column_analysis(grid& playing_grid, coord coordinates){
     unsigned int row ;
     for (row = 0; row <= 8; ++row) {
         if(row != coordinates.row){
             if (playing_grid.tabular[row][coordinates.column].valid_status == true) {
-                playing_grid.tabular[coordinates.row][coordinates.column].value ^= playing_grid.tabular[row][coordinates.column].value ;
+                playing_grid.tabular[coordinates.row][coordinates.column].value &= (~playing_grid.tabular[row][coordinates.column].value) ;
             }
         }
     }
 }
 
-void box_analysis(grid playing_grid, coord coordinates){
+void box_analysis(grid& playing_grid, coord coordinates){
     int row, row_mod, init_row ;
     int column, column_mod, init_column ;
     /*
@@ -152,15 +152,16 @@ void box_analysis(grid playing_grid, coord coordinates){
         for (column=0; column <= 2; ++column) {
             if((init_row + row != 0) && (init_column + column != 0)){
                 if (playing_grid.tabular[coordinates.row + init_row + row][coordinates.column + init_column + column].valid_status == true) {
-                    playing_grid.tabular[coordinates.row][coordinates.column].value ^= playing_grid.tabular[coordinates.row + init_row + row][coordinates.column + init_column + column].value ;
+                    playing_grid.tabular[coordinates.row][coordinates.column].value &= (~playing_grid.tabular[coordinates.row + init_row + row][coordinates.column + init_column + column].value) ;
                 }
             }
         }
     }
 }
 
-void sudoku_resolution(grid playing_grid){
+void sudoku_resolution(grid& playing_grid){
     coord coordinates ;
+    unsigned int choice ;
     
     // algorithm
     full_1_init(playing_grid) ;
@@ -181,6 +182,31 @@ void sudoku_resolution(grid playing_grid){
                 }
             }
         }
+        /*
+        cout << "Nombre de cases validées : " << playing_grid.valid_squares << endl ;
+        cout << "Que voulez-vous faire?" << endl ;
+        cout << "\t1. Continuer." << endl ;
+        cout << "\t2. Afficher la grille." << endl ;
+        cout << "\t3. Avorter l'opération." << endl ;
+        cout << "Saisissez votre choix:" ;
+        cin  >> choice ;
+        while(choice < 1 || choice > 3){
+            cout << "Erreur de saisie, veuillez ressaisir votre choix : " ;
+            cin >> choice ;
+        }
+        switch (choice) {
+            case 1 :
+                break;
+                
+            case 2 :
+                sudoku_display(playing_grid) ;
+                break ;
+                
+            default :
+                playing_grid.valid_squares = 81 ;
+                cout << "Opération avortée." << endl ;
+                break;
+        }*/
     }while (playing_grid.valid_squares < 81);
     
 }
@@ -221,7 +247,7 @@ void sudoku_display(const grid playing_grid){
                     cout << "9";
                     break;
                 default:
-                    cout << "0";
+                    cout << " ";
                     break;
             }
             cout << " " ;

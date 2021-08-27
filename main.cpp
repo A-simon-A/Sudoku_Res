@@ -14,6 +14,7 @@ int main() {
     coord coordinates ;
     unsigned int choice ;
     grid playing_grid ;
+    
     // algorithm
     cout << "Bonjour." << endl ;
     cout << "Bienvenue dans un programme de résolution de Sudoku." << endl << endl;
@@ -30,12 +31,13 @@ int main() {
     do{
         cout << "Que voulez-vous faire?" << endl ;
         cout << "\t1. Entrer de nouvelles valeurs." << endl ;
-        cout << "\t2. Lancer la résolution du Sudoku." << endl ;
-        cout << "\t3. Afficher la grille." << endl ;
-        cout << "\t4. Avorter l'opération." << endl ;
+        cout << "\t2. Supprimer une case." << endl ;
+        cout << "\t3. Lancer la résolution du Sudoku." << endl ;
+        cout << "\t4. Afficher la grille." << endl ;
+        cout << "\t5. Avorter l'opération." << endl ;
         cout << "Saisissez votre choix:" ;
         cin  >> choice ;
-        while(choice < 1 || choice > 4){
+        while(choice < 1 || choice > 5){
             cout << "Erreur de saisie, veuillez ressaisir votre choix : " ;
             cin >> choice ;
         }
@@ -47,10 +49,17 @@ int main() {
                 break;
                 
             case 2 :
+                cout << "Entrez les coordonnées de la case que vous voulez supprimer :" << endl ;
+                coordinates = ask_coord() ;
+                playing_grid.tabular[coordinates.row][coordinates.column].value = 0 ;
+                playing_grid.tabular[coordinates.row][coordinates.column].valid_status = false ;
+                break ;
+                
+            case 3 :
                 sudoku_resolution(playing_grid) ;
                 break;
                 
-            case 3 :
+            case 4 :
                 sudoku_display(playing_grid) ;
                 break;
                 

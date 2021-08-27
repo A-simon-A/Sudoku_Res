@@ -19,7 +19,7 @@ struct coord{
  */
 struct square{
     bool valid_status = false ;
-    int value = 0b0 ;
+    int value = 0 ;
 };
 
 struct grid{
@@ -47,7 +47,7 @@ square fill_square(void) ;
  Input / Output : grid
  Output         : /
  */
-void full_1_init(grid playing_grid) ;
+void full_1_init(grid& playing_grid) ;
 
 /*
  Role           : Check if the square is valid or not
@@ -55,7 +55,7 @@ void full_1_init(grid playing_grid) ;
  Input / Output : grid
  Output         : /
  */
-void valid_status_verification(grid playing_grid, coord coordinates);
+void valid_status_verification(grid& playing_grid, coord coordinates);
 
 /*
  Role           : search clues in the row of the square and save them in playing_grid.tabular[X][X].value
@@ -63,7 +63,7 @@ void valid_status_verification(grid playing_grid, coord coordinates);
  Input / Output : grid
  Output         : /
  */
-void row_analysis(grid playing_grid, coord coordinates) ;
+void row_analysis(grid& playing_grid, coord coordinates) ;
 
 /*
  Role           : search clues in the column of the square and save them in playing_grid.tabular[X][X].value
@@ -71,7 +71,7 @@ void row_analysis(grid playing_grid, coord coordinates) ;
  Input / Output : grid
  Output         : /
  */
-void column_analysis(grid playing_grid, coord coordinates) ;
+void column_analysis(grid& playing_grid, coord coordinates) ;
 
 /*
  Role           : search clues in the box of the square and save them in playing_grid.tabular[X][X].value
@@ -79,7 +79,7 @@ void column_analysis(grid playing_grid, coord coordinates) ;
  Input / Output : grid
  Output         : /
  */
-void box_analysis(grid playing_grid, coord coordinates) ;
+void box_analysis(grid& playing_grid, coord coordinates) ;
 
 
 /*
@@ -88,7 +88,7 @@ void box_analysis(grid playing_grid, coord coordinates) ;
  Input / Output : grid
  Output         : /
  */
-void sudoku_resolution(grid playing_grid) ;
+void sudoku_resolution(grid& playing_grid) ;
 
 /*
  Role           : displays the sudoku
