@@ -10,7 +10,6 @@
 using namespace std ;
 
 int main() {
-    char verif ;
     coord coordinates ;
     unsigned int choice ;
     grid playing_grid ;
@@ -20,13 +19,11 @@ int main() {
     cout << "Bienvenue dans un programme de résolution de Sudoku." << endl << endl;
     cout << "Veuillez entrer les valeurs de cases connues." << endl ;
     
-    do{
-        coordinates = ask_coord() ;
-        playing_grid.tabular[coordinates.row][coordinates.column] = fill_square() ;
-        ++playing_grid.valid_squares ;
-        cout << "Voulez-vous entrer une autre case ? (Y/N)" ;
-        cin >> verif ;
-    }while(verif=='Y' || verif=='y') ;
+    coordinates.row = 0 ;
+    while(coordinates.row <= 8){
+        fill_row(playing_grid, coordinates.row) ;
+        ++coordinates.row ;
+    }
     
     do{
         cout << "Que voulez-vous faire?" << endl ;

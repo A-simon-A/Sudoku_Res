@@ -39,6 +39,67 @@ square fill_square(void){
     return res ;
 }
 
+void fill_row(grid& playing_grid, unsigned int row){
+    char row_input[10] ;
+    int increment ;
+    
+    // algorithm
+    cout << "Entrez les valeurs des 9 cases de la ligne " << row << "." << endl ;
+    cout << "Mettre un zéro pour chaque case vide, ne pas utiliser d'espaces." << endl ;
+    cin >> row_input ;
+    for (increment = 0; increment <= 8; ++increment) {
+        switch (row_input[increment]) {
+            case '1':
+                playing_grid.tabular[row][increment].value = 0b000000001 ;
+                playing_grid.tabular[row][increment].valid_status = true ;
+                ++playing_grid.valid_squares ;
+                break;
+            case '2':
+                playing_grid.tabular[row][increment].value = 0b000000010 ;
+                playing_grid.tabular[row][increment].valid_status = true ;
+                ++playing_grid.valid_squares ;
+                break;
+            case '3':
+                playing_grid.tabular[row][increment].value = 0b000000100 ;
+                playing_grid.tabular[row][increment].valid_status = true ;
+                ++playing_grid.valid_squares ;
+                break;
+            case '4':
+                playing_grid.tabular[row][increment].value = 0b000001000 ;
+                playing_grid.tabular[row][increment].valid_status = true ;
+                ++playing_grid.valid_squares ;
+                break;
+            case '5':
+                playing_grid.tabular[row][increment].value = 0b000010000 ;
+                playing_grid.tabular[row][increment].valid_status = true ;
+                ++playing_grid.valid_squares ;
+                break;
+            case '6':
+                playing_grid.tabular[row][increment].value = 0b000100000 ;
+                playing_grid.tabular[row][increment].valid_status = true ;
+                ++playing_grid.valid_squares ;
+                break;
+            case '7':
+                playing_grid.tabular[row][increment].value = 0b001000000 ;
+                playing_grid.tabular[row][increment].valid_status = true ;
+                ++playing_grid.valid_squares ;
+                break;
+            case '8':
+                playing_grid.tabular[row][increment].value = 0b010000000 ;
+                playing_grid.tabular[row][increment].valid_status = true ;
+                ++playing_grid.valid_squares ;
+                break;
+            case '9':
+                playing_grid.tabular[row][increment].value = 0b100000000 ;
+                playing_grid.tabular[row][increment].valid_status = true ;
+                ++playing_grid.valid_squares ;
+                break;
+            default:
+                break;
+        }
+    }
+}
+
 void full_1_init(grid& playing_grid){
     unsigned int column, row ;
     for (column = 0; column <= 8; ++column) {
@@ -182,7 +243,7 @@ void sudoku_resolution(grid& playing_grid){
                 }
             }
         }
-        /*
+        
         cout << "Nombre de cases validées : " << playing_grid.valid_squares << endl ;
         cout << "Que voulez-vous faire?" << endl ;
         cout << "\t1. Continuer." << endl ;
@@ -206,7 +267,7 @@ void sudoku_resolution(grid& playing_grid){
                 playing_grid.valid_squares = 81 ;
                 cout << "Opération avortée." << endl ;
                 break;
-        }*/
+        }
     }while (playing_grid.valid_squares < 81);
     
 }

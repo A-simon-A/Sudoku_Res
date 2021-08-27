@@ -42,6 +42,14 @@ coord ask_coord(void) ;
 square fill_square(void) ;
 
 /*
+ Role           : fill a complete row (number of the row indicated in Input)
+ Input          : row
+ Input / Output : grid
+ Output         : /
+ */
+void fill_row(grid& playing_grid, unsigned int row) ;
+
+/*
  Role           : initialization of all empty squares at 0b111111111
  Input          : /
  Input / Output : grid
