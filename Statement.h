@@ -89,6 +89,11 @@ void column_analysis(grid& playing_grid, coord coordinates) ;
  */
 void box_analysis(grid& playing_grid, coord coordinates) ;
 
+void rows_clue_analysis(grid& playing_grid) ;
+
+void columns_clue_analysis(grid& playing_grid) ;
+
+void boxes_clue_analysis(grid& playing_grid) ;
 
 /*
  Role           : makes the resolution of the sudoku

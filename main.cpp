@@ -32,7 +32,7 @@ int main() {
         cout << "\t3. Lancer la résolution du Sudoku." << endl ;
         cout << "\t4. Afficher la grille." << endl ;
         cout << "\t5. Avorter l'opération." << endl ;
-        cout << "Saisissez votre choix:" ;
+        cout << "Saisissez votre choix : " ;
         cin  >> choice ;
         while(choice < 1 || choice > 5){
             cout << "Erreur de saisie, veuillez ressaisir votre choix : " ;

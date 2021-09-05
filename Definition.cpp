@@ -220,54 +220,390 @@ void box_analysis(grid& playing_grid, coord coordinates){
     }
 }
 
-void sudoku_resolution(grid& playing_grid){
-    coord coordinates ;
-    unsigned int choice ;
+void rows_clue_analysis(grid& playing_grid){
+    unsigned int row ;
+    unsigned int mask, number, square, comparison_res ;
+    unsigned int number_of_done_squares, number_of_squares_found, square_found ;
     
     // algorithm
+    row = 0 ;
+    while (row < 9){
+        mask = 0b111111110 ;
+        number = 1 ;
+        while (number < 10){
+            square_found = 0 ;
+            number_of_squares_found = 0 ;
+            number_of_done_squares = 0 ;
+            square = 0 ;
+            while (number_of_done_squares < 9){
+                comparison_res = playing_grid.tabular[row][square].value | mask ;
+                if (comparison_res == 0b111111111) {
+                    if (playing_grid.tabular[row][square].valid_status == false) {
+                        ++number_of_squares_found ;
+                        if (number_of_squares_found > 1) {
+                            /*
+                             the number is a clue in at least two different squares
+                             we can not draw information form it
+                            */
+                            number_of_done_squares = 9 ; // [sortie sauvage]
+                        }else{
+                            square_found = 0b1 << number_of_done_squares ;
+                            ++number_of_done_squares ;
+                        }
+                    }else{
+                        // the number is already in a square with a valid status
+                        number_of_squares_found = 0 ;
+                        number_of_done_squares = 9 ; // [sortie sauvage]
+                    }
+                }else{
+                    ++number_of_done_squares ;
+                }
+                ++square ;
+            }
+            if (number_of_squares_found == 1) {
+                switch (square_found) {
+                    case 0b000000001:
+                        square = 0 ;
+                        break;
+                    case 0b000000010:
+                        square = 1 ;
+                        break;
+                    case 0b000000100:
+                        square = 2 ;
+                        break;
+                    case 0b000001000:
+                        square = 3 ;
+                        break;
+                    case 0b000010000:
+                        square = 4 ;
+                        break;
+                    case 0b000100000:
+                        square = 5 ;
+                        break;
+                    case 0b001000000:
+                        square = 6 ;
+                        break;
+                    case 0b010000000:
+                        square = 7 ;
+                        break;
+                    case 0b100000000:
+                        square = 8 ;
+                        break;
+                    default:
+                        break;
+                }
+                playing_grid.tabular[row][square].value = ((~mask) & 0b111111111) ;
+                playing_grid.tabular[row][square].valid_status = true ;
+                ++playing_grid.valid_squares ;
+            }
+            mask = mask << 1 ; // mask offset
+            mask += 0b1 ; // least significant bit set to 1
+            mask &= 0b111111111 ; // most significant bit set to 0
+            ++number ;
+        }
+        ++row ;
+    }
+}
+
+void columns_clue_analysis(grid& playing_grid){
+    unsigned int column ;
+    unsigned int mask, number, square, comparison_res ;
+    unsigned int number_of_done_squares, number_of_squares_found, square_found ;
+    
+    // algorithm
+    column = 0 ;
+    while (column < 9){
+        mask = 0b111111110 ;
+        number = 1 ;
+        while (number < 10){
+            square_found = 0 ;
+            number_of_squares_found = 0 ;
+            number_of_done_squares = 0 ;
+            square = 0 ;
+            while (number_of_done_squares < 9){
+                comparison_res = playing_grid.tabular[square][column].value | mask ;
+                if (comparison_res == 0b111111111) {
+                    if (playing_grid.tabular[square][column].valid_status == false) {
+                        ++number_of_squares_found ;
+                        if (number_of_squares_found > 1) {
+                            /*
+                             the number is a clue in at least two different squares
+                             we can not draw information form it
+                            */
+                            number_of_done_squares = 9 ; // [sortie sauvage]
+                        }else{
+                            square_found = 0b1 << number_of_done_squares ;
+                            ++number_of_done_squares ;
+                        }
+                    }else{
+                        // the number is already in a square with a valid status
+                        number_of_squares_found = 0 ;
+                        number_of_done_squares = 9 ; // [sortie sauvage]
+                    }
+                }else{
+                    ++number_of_done_squares ;
+                }
+                ++square ;
+            }
+            if (number_of_squares_found == 1) {
+                switch (square_found) {
+                    case 0b000000001:
+                        square = 0 ;
+                        break;
+                    case 0b000000010:
+                        square = 1 ;
+                        break;
+                    case 0b000000100:
+                        square = 2 ;
+                        break;
+                    case 0b000001000:
+                        square = 3 ;
+                        break;
+                    case 0b000010000:
+                        square = 4 ;
+                        break;
+                    case 0b000100000:
+                        square = 5 ;
+                        break;
+                    case 0b001000000:
+                        square = 6 ;
+                        break;
+                    case 0b010000000:
+                        square = 7 ;
+                        break;
+                    case 0b100000000:
+                        square = 8 ;
+                        break;
+                    default:
+                        break;
+                }
+                playing_grid.tabular[square][column].value = ((~mask) & 0b111111111) ;
+                playing_grid.tabular[square][column].valid_status = true ;
+                ++playing_grid.valid_squares ;
+            }
+            mask = mask << 1 ; // mask offset
+            mask += 0b1 ; // least significant bit set to 1
+            mask &= 0b111111111 ; // most significant bit set to 0
+            ++number ;
+        }
+        ++column ;
+    }
+}
+
+void boxes_clue_analysis(grid& playing_grid){
+    unsigned int box, column, column_memory, row, row_memory ;
+    unsigned int mask, number, comparison_res ;
+    unsigned int number_of_done_squares, number_of_squares_found, square_found ;
+    
+    // algorithm
+    
+    box = 0 ;
+    while (box < 9){
+        switch (box) {
+            case 0:
+                row_memory = 0 ;
+                column_memory = 0 ;
+                break;
+                
+            case 1:
+                row_memory = 0 ;
+                column_memory = 3 ;
+                break;
+                
+            case 2:
+                row_memory = 0 ;
+                column_memory = 6 ;
+                break;
+
+            case 3:
+                row_memory = 3 ;
+                column_memory = 0 ;
+                break;
+            
+            case 4:
+                row_memory = 3 ;
+                column_memory = 3 ;
+                break;
+
+            case 5:
+                row_memory = 3 ;
+                column_memory = 6 ;
+                break;
+
+            case 6:
+                row_memory = 6 ;
+                column_memory = 0 ;
+                break;
+
+            case 7:
+                row_memory = 6 ;
+                column_memory = 3 ;
+                break;
+
+            default:
+                row_memory = 6 ;
+                column_memory = 6 ;
+                break;
+        }
+        mask = 0b111111110 ;
+        number = 1 ;
+        while (number < 10){
+            column = column_memory ;
+            row = row_memory ;
+            square_found = 0 ;
+            number_of_squares_found = 0 ;
+            number_of_done_squares = 0 ;
+            while (number_of_done_squares < 9){
+                if ((number == 3) || (number == 6)) {
+                    ++row ;
+                    column = column_memory ;
+                }
+                comparison_res = (playing_grid.tabular[row][column].value | mask) ;
+                if (comparison_res == 0b111111111) {
+                    if (playing_grid.tabular[row][column].valid_status == false) {
+                        ++number_of_squares_found ;
+                        if (number_of_squares_found > 1) {
+                            /*
+                             the number is a clue in at least two different squares
+                             we can not draw information form it
+                            */
+                            number_of_done_squares = 9 ; // [sortie sauvage]
+                        }else{
+                            square_found = 0b1 << number_of_done_squares ;
+                            ++number_of_done_squares ;
+                        }
+                    }else{
+                        // the number is already in a square with a valid status
+                        number_of_squares_found = 0 ;
+                        number_of_done_squares = 9 ; // [sortie sauvage]
+                    }
+                }else{
+                    ++number_of_done_squares ;
+                }
+                ++column ;
+            }
+            if (number_of_squares_found == 1) {
+                switch (square_found) {
+                    case 0b000000001:
+                        row = row_memory ;
+                        column = column_memory ;
+                        break;
+                    case 0b000000010:
+                        row = row_memory ;
+                        column = column_memory + 1 ;
+                        break;
+                    case 0b000000100:
+                        row = row_memory ;
+                        column = column_memory + 2 ;
+                        break;
+                    case 0b000001000:
+                        row = row_memory + 1 ;
+                        column = column_memory ;
+                        break;
+                    case 0b000010000:
+                        row = row_memory + 1 ;
+                        column = column_memory + 1 ;
+                        break;
+                    case 0b000100000:
+                        row = row_memory + 1 ;
+                        column = column_memory + 2 ;
+                        break;
+                    case 0b001000000:
+                        column = column_memory ;
+                        break;
+                    case 0b010000000:
+                        column = column_memory + 1 ;
+                        break;
+                    case 0b100000000:
+                        column = column_memory + 2 ;
+                        break;
+                    default:
+                        break;
+                }
+                playing_grid.tabular[row][column].value = ((~mask) & 0b111111111) ;
+                playing_grid.tabular[row][column].valid_status = true ;
+                ++playing_grid.valid_squares ;
+            }
+            mask = mask << 1 ; // mask offset
+            mask += 0b1 ; // least significant bit set to 1
+            mask &= 0b111111111 ; // most significant bit set to 0
+            ++number ;
+        }
+        ++box ;
+    }
+}
+
+void sudoku_resolution(grid& playing_grid){
+    coord coordinates ;
+    unsigned int choice, unsuccessful_research, valid_squares_memory ;
+    
+    // algorithm
+    unsuccessful_research = 0 ;
     full_1_init(playing_grid) ;
     do{
-        for (coordinates.row = 0; coordinates.row <= 8; ++coordinates.row) {
-            for (coordinates.column = 0; coordinates.column <= 8; ++coordinates.column) {
-                if (playing_grid.tabular[coordinates.row][coordinates.column].valid_status != true) {
-                    row_analysis(playing_grid, coordinates) ;
-                    valid_status_verification(playing_grid, coordinates) ;
+        valid_squares_memory = playing_grid.valid_squares ;
+        //if (unsuccessful_research < 5) {
+            for (coordinates.row = 0; coordinates.row <= 8; ++coordinates.row) {
+                for (coordinates.column = 0; coordinates.column <= 8; ++coordinates.column) {
                     if (playing_grid.tabular[coordinates.row][coordinates.column].valid_status != true) {
-                        column_analysis(playing_grid, coordinates) ;
+                        row_analysis(playing_grid, coordinates) ;
                         valid_status_verification(playing_grid, coordinates) ;
                         if (playing_grid.tabular[coordinates.row][coordinates.column].valid_status != true) {
-                            box_analysis(playing_grid, coordinates) ;
+                            column_analysis(playing_grid, coordinates) ;
                             valid_status_verification(playing_grid, coordinates) ;
+                            if (playing_grid.tabular[coordinates.row][coordinates.column].valid_status != true) {
+                                box_analysis(playing_grid, coordinates) ;
+                                valid_status_verification(playing_grid, coordinates) ;
+                            }
                         }
                     }
                 }
             }
-        }
-        
-        cout << "Nombre de cases validées : " << playing_grid.valid_squares << endl ;
-        cout << "Que voulez-vous faire?" << endl ;
-        cout << "\t1. Continuer." << endl ;
-        cout << "\t2. Afficher la grille." << endl ;
-        cout << "\t3. Avorter l'opération." << endl ;
-        cout << "Saisissez votre choix:" ;
-        cin  >> choice ;
-        while(choice < 1 || choice > 3){
-            cout << "Erreur de saisie, veuillez ressaisir votre choix : " ;
-            cin >> choice ;
-        }
-        switch (choice) {
-            case 1 :
-                break;
-                
-            case 2 :
-                sudoku_display(playing_grid) ;
-                break ;
-                
-            default :
-                playing_grid.valid_squares = 81 ;
-                cout << "Opération avortée." << endl ;
-                break;
-        }
+        rows_clue_analysis(playing_grid) ;
+        columns_clue_analysis(playing_grid) ;
+        boxes_clue_analysis(playing_grid) ;
+        /*
+            if (valid_squares_memory == playing_grid.valid_squares) {
+                ++unsuccessful_research ;
+            }else{
+                unsuccessful_research = 0 ;
+            }
+         */
+            
+            
+            cout << "Nombre de cases validées : " << playing_grid.valid_squares << endl ;
+            cout << "Que voulez-vous faire?" << endl ;
+            cout << "\t1. Continuer." << endl ;
+            cout << "\t2. Afficher la grille." << endl ;
+            cout << "\t3. Avorter l'opération." << endl ;
+            cout << "Saisissez votre choix : " ;
+            cin  >> choice ;
+            while(choice < 1 || choice > 3){
+                cout << "Erreur de saisie, veuillez ressaisir votre choix : " ;
+                cin >> choice ;
+            }
+            switch (choice) {
+                case 1 :
+                    break;
+                    
+                case 2 :
+                    sudoku_display(playing_grid) ;
+                    break ;
+                    
+                default :
+                    playing_grid.valid_squares = 81 ;
+                    cout << "Opération avortée." << endl ;
+                    break;
+            }
+            
+        /*
+        }else{
+            rows_clue_analysis(playing_grid) ;
+            columns_clue_analysis(playing_grid) ;
+            boxes_clue_analysis(playing_grid) ;
+            
+            unsuccessful_research = 0 ;
+        }*/
     }while (playing_grid.valid_squares < 81);
     
 }
