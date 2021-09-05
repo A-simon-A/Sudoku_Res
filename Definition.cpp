@@ -454,7 +454,7 @@ void boxes_clue_analysis(grid& playing_grid){
             number_of_squares_found = 0 ;
             number_of_done_squares = 0 ;
             while (number_of_done_squares < 9){
-                if ((number == 3) || (number == 6)) {
+                if ((number_of_done_squares == 3) || (number_of_done_squares == 6)) {
                     ++row ;
                     column = column_memory ;
                 }
@@ -535,14 +535,15 @@ void boxes_clue_analysis(grid& playing_grid){
 
 void sudoku_resolution(grid& playing_grid){
     coord coordinates ;
-    unsigned int choice, unsuccessful_research, valid_squares_memory ;
+    unsigned int unsuccessful_research, valid_squares_memory ;
+    // unsigned int choice ;
     
     // algorithm
     unsuccessful_research = 0 ;
     full_1_init(playing_grid) ;
     do{
         valid_squares_memory = playing_grid.valid_squares ;
-        //if (unsuccessful_research < 5) {
+        if (unsuccessful_research < 5) {
             for (coordinates.row = 0; coordinates.row <= 8; ++coordinates.row) {
                 for (coordinates.column = 0; coordinates.column <= 8; ++coordinates.column) {
                     if (playing_grid.tabular[coordinates.row][coordinates.column].valid_status != true) {
@@ -559,18 +560,14 @@ void sudoku_resolution(grid& playing_grid){
                     }
                 }
             }
-        rows_clue_analysis(playing_grid) ;
-        columns_clue_analysis(playing_grid) ;
-        boxes_clue_analysis(playing_grid) ;
-        /*
             if (valid_squares_memory == playing_grid.valid_squares) {
                 ++unsuccessful_research ;
             }else{
                 unsuccessful_research = 0 ;
             }
-         */
             
-            
+            /*
+            TESTING PART
             cout << "Nombre de cases validées : " << playing_grid.valid_squares << endl ;
             cout << "Que voulez-vous faire?" << endl ;
             cout << "\t1. Continuer." << endl ;
@@ -595,15 +592,15 @@ void sudoku_resolution(grid& playing_grid){
                     cout << "Opération avortée." << endl ;
                     break;
             }
-            
-        /*
+            */
+        
         }else{
             rows_clue_analysis(playing_grid) ;
             columns_clue_analysis(playing_grid) ;
             boxes_clue_analysis(playing_grid) ;
             
             unsuccessful_research = 0 ;
-        }*/
+        }
     }while (playing_grid.valid_squares < 81);
     
 }

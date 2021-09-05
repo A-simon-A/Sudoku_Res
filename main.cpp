@@ -6,6 +6,7 @@
 //
 
 #include <iostream>
+#include <time.h>
 #include "Statement.h"
 using namespace std ;
 
@@ -13,6 +14,8 @@ int main() {
     coord coordinates ;
     unsigned int choice ;
     grid playing_grid ;
+    clock_t start, end;
+    double elapsed;
     
     // algorithm
     cout << "Bonjour." << endl ;
@@ -53,7 +56,9 @@ int main() {
                 break ;
                 
             case 3 :
+                start = clock();
                 sudoku_resolution(playing_grid) ;
+                end = clock();
                 break;
                 
             case 4 :
@@ -66,7 +71,8 @@ int main() {
                 break;
         }
     }while(playing_grid.valid_squares < 81);
-    cout << "Fin du Sudoku, affichage automatique du résultat final :" << endl ;
+    elapsed = ((double)end - start) / CLOCKS_PER_SEC;
+    cout << "Fin du Sudoku en " << elapsed << "secondes, affichage automatique du résultat final :" << endl ;
     sudoku_display(playing_grid) ;
 
     
