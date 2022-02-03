@@ -211,7 +211,13 @@ void box_analysis(grid& playing_grid, coord coordinates){
     }
     for (row = 0; row <= 2; ++row) {
         for (column=0; column <= 2; ++column) {
-            if((init_row + row != 0) && (init_column + column != 0)){
+            if((init_row + row != 0) || (init_column + column != 0)){
+                /* can be changed with :
+                 * if((init_row + row != 0) && (init_column + column != 0)){
+                 * problem : the cells in the same row / column are set aside.
+                 * It could be an optimisation because the program still analyse the cells that are set aside 
+                 * using the row_analysis and the column_analysis, so it prevent analysing same cells with two functions.
+                 */
                 if (playing_grid.tabular[coordinates.row + init_row + row][coordinates.column + init_column + column].valid_status == true) {
                     playing_grid.tabular[coordinates.row][coordinates.column].value &= (~playing_grid.tabular[coordinates.row + init_row + row][coordinates.column + init_column + column].value) ;
                 }
